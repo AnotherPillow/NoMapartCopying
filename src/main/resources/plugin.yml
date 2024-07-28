@@ -2,3 +2,8 @@ name: NoMapartCopying
 version: '${version}'
 main: com.anotherpillow.nomapartcopying.NoMapartCopying
 api-version: '1.19'
+
+commands:
+  nomapartcopying:
+    description: Provides information on installed plugin version.
+    usage: /<command>

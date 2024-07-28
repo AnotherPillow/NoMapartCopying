@@ -1,16 +1,19 @@
 package com.anotherpillow.nomapartcopying;
 
+import com.anotherpillow.nomapartcopying.commands.NoMapartCopyingCommand;
 import com.anotherpillow.nomapartcopying.events.CraftItemEventListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +28,7 @@ public final class NoMapartCopying extends JavaPlugin {
 
     public static FileConfiguration config = null;
 
-    public String version = "1.0.1";
+    public static String version = "1.0.1";
 
     public Logger logger = getLogger();
 
@@ -53,6 +56,9 @@ public final class NoMapartCopying extends JavaPlugin {
         recipe.addIngredient(Material.getMaterial(config.getString("config.locker-item")));
 
         Bukkit.addRecipe(recipe);
+
+        this.getCommand("nomapartcopying").setExecutor(new NoMapartCopyingCommand());
+
     }
 
     @Override
