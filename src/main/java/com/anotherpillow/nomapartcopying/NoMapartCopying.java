@@ -50,7 +50,6 @@ public final class NoMapartCopying extends JavaPlugin {
         ShapelessRecipe recipe = new ShapelessRecipe(key, item);
 
         recipe.addIngredient(Material.FILLED_MAP);
-        logger.info(config.getString("config.locker-item"));
         recipe.addIngredient(Material.getMaterial(config.getString("config.locker-item")));
 
         Bukkit.addRecipe(recipe);
