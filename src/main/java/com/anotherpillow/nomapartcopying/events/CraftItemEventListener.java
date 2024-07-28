@@ -30,9 +30,6 @@ public class CraftItemEventListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onItemCraft(PrepareItemCraftEvent event) {
-        System.out.println(event.getRecipe());
-        System.out.println(event.getInventory().getResult());
-        System.out.println(Arrays.toString(event.getInventory().getMatrix()));
 
         ItemStack map = null;
         boolean hasGlassPane = false;
@@ -43,7 +40,7 @@ public class CraftItemEventListener implements Listener {
             if (item.getType() == Material.FILLED_MAP) {
                 System.out.println("Found the filled map!");
                 map = item.clone();
-            } else if (item.getType() == Material.RED_STAINED_GLASS_PANE) {
+            } else if (item.getType() == Material.getMaterial(NoMapartCopying.config.getString("config.locker-item"))) {
                 hasGlassPane = true;
             } else if (item.getType() == Material.MAP) {
                 hasEmptyMap = true;
@@ -64,9 +61,10 @@ public class CraftItemEventListener implements Listener {
                     "Copying prevented by " + author
             }));
 
-            meta.displayName(meta.hasDisplayName()
-                    ? Objects.requireNonNull(meta.displayName()).color(NamedTextColor.DARK_RED)
-                    : Component.text("Map", NamedTextColor.DARK_RED));
+            if (NoMapartCopying.config.getBoolean("config.rename-item"))
+                meta.displayName(meta.hasDisplayName()
+                        ? Objects.requireNonNull(meta.displayName()).color(NamedTextColor.DARK_RED)
+                        : Component.text("Map", NamedTextColor.DARK_RED));
 
             map.setItemMeta(meta);
 

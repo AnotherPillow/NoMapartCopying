@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -22,18 +23,24 @@ public final class NoMapartCopying extends JavaPlugin {
         return super.getLogger();
     }
 
+    public static FileConfiguration config = null;
+
+    public String version = "1.0.1";
+
     public Logger logger = getLogger();
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+        config = getConfig();
         getServer().getPluginManager().registerEvents(new CraftItemEventListener(), this);
         // Plugin startup logic
-        this.logger.info("ON ENABLE HAS BEEN RAN IN PLUGIN");
         ItemStack item = new ItemStack(Material.FILLED_MAP);
 
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(ChatColor.DARK_RED + meta.displayName().toString());
+        if (config.getBoolean("config.rename-item"))
+            meta.setDisplayName(ChatColor.DARK_RED + (meta.hasDisplayName() ? meta.displayName() : "Map").toString());
 
         item.setItemMeta(meta);
 
@@ -43,7 +50,8 @@ public final class NoMapartCopying extends JavaPlugin {
         ShapelessRecipe recipe = new ShapelessRecipe(key, item);
 
         recipe.addIngredient(Material.FILLED_MAP);
-        recipe.addIngredient(Material.RED_STAINED_GLASS_PANE);
+        logger.info(config.getString("config.locker-item"));
+        recipe.addIngredient(Material.getMaterial(config.getString("config.locker-item")));
 
         Bukkit.addRecipe(recipe);
     }
