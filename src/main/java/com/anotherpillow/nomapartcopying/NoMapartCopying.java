@@ -33,7 +33,7 @@ public final class NoMapartCopying extends JavaPlugin {
 
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(ChatColor.DARK_RED + "Map");
+        meta.setDisplayName(ChatColor.DARK_RED + meta.displayName().toString());
 
         item.setItemMeta(meta);
 
