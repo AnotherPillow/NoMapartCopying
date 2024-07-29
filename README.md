@@ -8,6 +8,11 @@ A PaperMC plugin designed to allow a map author to make their maps uncopyable. T
     - To build from source, download this repository and run `./gradlew.bat build` (or just `./gradlew build` if not on Windows)
 2. Place the resulting .jar in your server's plugins folder.
 
+### Config
+
+- `locker-item` is the item used to prevent copying on maps. Must be an unnamespaced material name. Default is `RED_STAINED_GLASS_PANE`
+- `rename-item` whether or not to rename the new map item to make a red name.
+
 ## Usage for players
 
 1. [Create a map](https://minecraft.wiki/w/Map#Mapping)

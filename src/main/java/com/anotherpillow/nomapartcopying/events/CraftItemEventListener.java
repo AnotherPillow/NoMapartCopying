@@ -8,6 +8,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
@@ -19,6 +20,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +30,8 @@ import java.util.*;
 import java.util.logging.Logger;
 
 public class CraftItemEventListener implements Listener {
+    public static final NamespacedKey ownerKey = new NamespacedKey(NoMapartCopying.getPlugin(NoMapartCopying.class), "map-owner");
+    public static final NamespacedKey lockedKey = new NamespacedKey(NoMapartCopying.getPlugin(NoMapartCopying.class), "is-copy-locked");
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onItemCraft(PrepareItemCraftEvent event) {
@@ -50,16 +55,28 @@ public class CraftItemEventListener implements Listener {
         if (map == null) return;
 
         List<HumanEntity> viewers = event.getViewers();
-        String author = "???";
-        if (!viewers.isEmpty()) author = viewers.get(0).getName();
+        String player = null;
+        String playerUUID = null;
+        if (!viewers.isEmpty()) {
+            HumanEntity user = viewers.get(0);
+            player = user.getName();
+            playerUUID = user.getUniqueId().toString();
+        }
 
+
+        ItemMeta meta = map.getItemMeta();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+
+        String mapExistingAuthor = container.get(ownerKey, PersistentDataType.STRING);
+        @Nullable Integer isExistingLocked = container.get(lockedKey, PersistentDataType.INTEGER);
 
         if (hasGlassPane) {
-            ItemMeta meta = map.getItemMeta();
-
             meta.setLore(List.of(new String[]{
-                    "Copying prevented by " + author
+                    "Copying prevented by " + player
             }));
+
+            container.set(ownerKey, PersistentDataType.STRING, playerUUID);
+            container.set(lockedKey, PersistentDataType.INTEGER, 1);
 
             if (NoMapartCopying.config.getBoolean("config.rename-item"))
                 meta.displayName(meta.hasDisplayName()
@@ -69,9 +86,9 @@ public class CraftItemEventListener implements Listener {
             map.setItemMeta(meta);
 
             event.getInventory().setResult(map);
-        } else if (hasEmptyMap && map.lore() != null) { // if a copying is attempted, and there's lore
+        } else if (hasEmptyMap && !Objects .equals(mapExistingAuthor, playerUUID)) { // if a copying is attempted,  and the player is NOT the locker of the map
             event.getInventory().setResult(null);
-        } else if (hasEmptyMap && map.lore() == null) {
+        } else if (hasEmptyMap && (isExistingLocked != 1 /*unlocked*/ || Objects.equals(mapExistingAuthor, playerUUID))) { // if a copying is attempted, and the author on the map is either nobody (unlocked) or it's the author trying to copy it
             map.setAmount(2);
             event.getInventory().setResult(map);
         }
