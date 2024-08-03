@@ -2,40 +2,35 @@ package com.anotherpillow.nomapartcopying.events;
 
 import com.anotherpillow.nomapartcopying.NoMapartCopying;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.NBTComponent;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.inventory.CartographyInventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Nullable;
+import com.anotherpillow.nomapartcopying.NoMapartCopying;
 
 import java.util.*;
-import java.util.logging.Logger;
 
-public class CraftItemEventListener implements Listener {
+public class EventListeners implements Listener {
     public static final NamespacedKey ownerKey = new NamespacedKey(NoMapartCopying.getPlugin(NoMapartCopying.class), "map-owner");
     public static final NamespacedKey lockedKey = new NamespacedKey(NoMapartCopying.getPlugin(NoMapartCopying.class), "is-copy-locked");
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onItemCraft(PrepareItemCraftEvent event) {
-
+        System.out.println(event.getInventory().getType().defaultTitle());
         ItemStack map = null;
         boolean hasGlassPane = false;
         boolean hasEmptyMap = false;
@@ -91,6 +86,24 @@ public class CraftItemEventListener implements Listener {
         } else if (hasEmptyMap && (isExistingLocked != 1 /*unlocked*/ || Objects.equals(mapExistingAuthor, playerUUID))) { // if a copying is attempted, and the author on the map is either nobody (unlocked) or it's the author trying to copy it
             map.setAmount(2);
             event.getInventory().setResult(map);
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (NoMapartCopying.config.getBoolean("config.close-cartography-attempted-use")) return;
+//        System.out.println(event.getInventory().getType());
+        if (event.getInventory().getType() == InventoryType.CARTOGRAPHY) {
+            CartographyInventory inventory = (CartographyInventory) event.getInventory();
+
+            if (inventory.getSize() < 2) return;
+//            System.out.println(Arrays.toString(inventory.getStorageContents()));
+            ItemStack item1 = inventory.getItem(0);
+
+            if (item1 != null) if (item1.getItemMeta().getPersistentDataContainer().has(lockedKey)) inventory.close();;
+            ItemStack item2 = inventory.getItem(1);
+            if (item2 != null && item2.getType() == Material.MAP) inventory.close();
+
         }
     }
 }

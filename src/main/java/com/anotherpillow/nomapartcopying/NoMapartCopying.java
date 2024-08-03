@@ -1,23 +1,21 @@
 package com.anotherpillow.nomapartcopying;
 
 import com.anotherpillow.nomapartcopying.commands.NoMapartCopyingCommand;
-import com.anotherpillow.nomapartcopying.events.CraftItemEventListener;
+import com.anotherpillow.nomapartcopying.events.EventListeners;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.logging.Logger;
+import java.util.Iterator;
 
 public final class NoMapartCopying extends JavaPlugin {
 
@@ -37,7 +35,7 @@ public final class NoMapartCopying extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         config = getConfig();
-        getServer().getPluginManager().registerEvents(new CraftItemEventListener(), this);
+        getServer().getPluginManager().registerEvents(new EventListeners(), this);
         // Plugin startup logic
         ItemStack item = new ItemStack(Material.FILLED_MAP);
 
@@ -56,9 +54,22 @@ public final class NoMapartCopying extends JavaPlugin {
         recipe.addIngredient(Material.FILLED_MAP);
         recipe.addIngredient(Material.getMaterial(config.getString("config.locker-item")));
 
+
+
         Bukkit.addRecipe(recipe);
 
         this.getCommand("nomapartcopying").setExecutor(new NoMapartCopyingCommand());
+
+//        Iterator<Recipe> it = Bukkit.recipeIterator();
+//        while (it.hasNext()) {
+//            Recipe next = it.next();
+//            it.remove();
+////            if (next != null && next.getResult() == new ItemStack(Material.FILLED_MAP, 1)) {
+////                it.remove();
+////                logger.info("Unregistered filled_map recipe");
+////            }
+//        }
+//            Bukkit.getServer().removeRecipe(NamespacedKey.fromString("map_cloning"));
 
     }
 
