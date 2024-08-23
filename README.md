@@ -2,6 +2,10 @@
 
 A PaperMC plugin designed to allow a map author to make their maps uncopyable. This was written over several months (large breaks) and is fairly simple overall.
 
+## Download
+
+- [Modrinth](https://modrinth.com/plugin/nomapartcopying)
+
 ## Usage for server owners
 
 1. Download the latest jar from the [releases page](https://github.com/AnotherPillow/NoMapartCopying/releases), from a Github workflow if applicable or build from source
@@ -25,7 +29,6 @@ A PaperMC plugin designed to allow a map author to make their maps uncopyable. T
 ## Inspiration
 
 The skyblock.net community, including [this post](https://skyblock.onl/threads/option-to-disable-mapart-copying.144363/).
-
 
 ## LICENSE
 
