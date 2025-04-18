@@ -1,5 +1,6 @@
 package com.anotherpillow.nomapartcopying.commands;
 
+import com.anotherpillow.nomapartcopying.Constants;
 import com.anotherpillow.nomapartcopying.NoMapartCopying;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -14,7 +15,7 @@ public class NoMapartCopyingCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        final Component response = Component.text(String.format("NoMapartCopying v%s", NoMapartCopying.version))
+        final Component response = Component.text(String.format("NoMapartCopying v%s", Constants.VERSION))
                 .color(NamedTextColor.DARK_PURPLE)
                 .append(Component.text("\nAuthor: ").color(NamedTextColor.LIGHT_PURPLE))
                 .append(Component.text("AnotherPillow (https://github.com/AnotherPillow)").color(TextColor.color(0xE377FF)))

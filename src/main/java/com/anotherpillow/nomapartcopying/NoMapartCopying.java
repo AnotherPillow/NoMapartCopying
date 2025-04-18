@@ -18,15 +18,12 @@ import java.util.logging.Logger;
 import java.util.Iterator;
 
 public final class NoMapartCopying extends JavaPlugin {
-
     @Override
     public @NotNull Logger getLogger() {
         return super.getLogger();
     }
 
     public static FileConfiguration config = null;
-
-    public static String version = "1.1.0";
 
     public Logger logger = getLogger();
 
@@ -52,7 +49,13 @@ public final class NoMapartCopying extends JavaPlugin {
         ShapelessRecipe recipe = new ShapelessRecipe(key, item);
 
         recipe.addIngredient(Material.FILLED_MAP);
-        recipe.addIngredient(Material.getMaterial(config.getString("config.locker-item")));
+
+        String lockerItemType = config.getString("config.locker-item");
+        if (lockerItemType == null) logger.warning(lockerItemType + " is not a valid material.");
+
+        Material lockerItem = Material.getMaterial(lockerItemType);
+        if (lockerItem == null) logger.warning(lockerItemType + " is not a valid material.");
+        else recipe.addIngredient(lockerItem);
 
 
 
