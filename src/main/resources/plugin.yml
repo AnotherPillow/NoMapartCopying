@@ -7,3 +7,4 @@ commands:
   nomapartcopying:
     description: Provides information on installed plugin version.
     usage: /<command>
+    aliases: [nmc]
