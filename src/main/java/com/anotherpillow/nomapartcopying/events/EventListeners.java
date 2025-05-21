@@ -63,8 +63,11 @@ public class EventListeners implements Listener {
         @Nullable Integer isExistingLocked = container.get(Constants.lockedKey, PersistentDataType.INTEGER);
 
         if (hasGlassPane) {
+            String loreString = NoMapartCopying.config.getString("config.locked-lore");
+            if (loreString == null) return;
+
             meta.setLore(List.of(new String[]{
-                    "Copying prevented by " + player
+                    String.format(loreString, player)
             }));
 
             container.set(Constants.ownerKey, PersistentDataType.STRING, playerUUID);
