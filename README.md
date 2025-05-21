@@ -8,7 +8,7 @@ A PaperMC plugin designed to allow a map author to make their maps uncopyable. T
 
 ## Usage for server owners
 
-1. Download the latest jar from the [releases page](https://github.com/AnotherPillow/NoMapartCopying/releases), from a Github workflow if applicable or build from source
+1. Download the latest jar from [Modrinth](https://modrinth.com/plugin/nomapartcopying), from a Github workflow if applicable or build from source
     - To build from source, download this repository and run `./gradlew.bat build` (or just `./gradlew build` if not on Windows)
 2. Place the resulting .jar in your server's plugins folder.
 
