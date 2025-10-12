@@ -91,7 +91,7 @@ public class EventListeners implements Listener {
 
     private void inventoryCheck(InventoryEvent event) {
         if (!NoMapartCopying.config.getBoolean("config.close-cartography-attempted-use")) return; // if closing cartography is disabled, ignore rest
-        HumanEntity human = ((InventoryClickEvent)event).getWhoClicked(); // even though not always castable, .getWhoClicked() always exists
+        HumanEntity human = event.getView().getPlayer();
         String playerUUID = human.getUniqueId().toString();
 
         if (event.getInventory().getType() == InventoryType.CARTOGRAPHY) {
